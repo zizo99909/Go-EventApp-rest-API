@@ -38,6 +38,15 @@ func getEvent(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse event id."})
 		return
 	}
+
+	event, err := models.GetEventByID(eventId)
+
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not fetch event."})
+		return
+	}
+
+	context.JSON(http.StatusOK, event)
 }
 
 func createEvent(context *gin.Context) {
