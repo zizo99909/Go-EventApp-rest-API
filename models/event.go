@@ -59,3 +59,7 @@ func GetAllEvents() ([]Event, error) {
 	}
 	return events, nil
 }
+
+func GetEventByID (id int64){
+	query := 
+}
