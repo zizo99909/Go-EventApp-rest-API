@@ -80,4 +80,6 @@ func (event Event) Update() error {
 	WHERE id=?
 	`
 
+	stmt, err := db.DB.Prepare(query)
+
 }
