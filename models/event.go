@@ -94,7 +94,7 @@ func (event Event) Update() error {
 
 func (event Event) Delete() error {
 	query := `
-	DELETE events
+	DELETE FROM events
 	WHERE id=?
 	`
 	stmt, err := db.DB.Prepare(query)
