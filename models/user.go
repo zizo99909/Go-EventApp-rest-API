@@ -59,4 +59,6 @@ func (u User) ValidateCredentials() error {
 	if !passwordIsValid {
 		return errors.New("Credentials invalid")
 	}
+
+	return nil
 }
