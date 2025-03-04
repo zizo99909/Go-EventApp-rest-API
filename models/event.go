@@ -108,3 +108,5 @@ func (event Event) Delete() error {
 
 	return err
 }
+
+func (e Event) Register() {}
