@@ -109,4 +109,15 @@ func (event Event) Delete() error {
 	return err
 }
 
-func (e Event) Register() {}
+func (e Event) Register(userId int) {
+	query := "INSERT INTO registrations(event_id, user_id) VALUES (?,?)"
+	stmt, err := db.DB.Prepare(query)
+
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	stmt.Exec()
+}
