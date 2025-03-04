@@ -54,4 +54,10 @@ func createTables() {
 	if err != nil {
 		panic("Couldn't create events table.")
 	}
+
+	createRegistrationsTable := `
+	CREATE TABLE IF NOT EXISTS registrations (
+		id INTEGER PRIMARY KEY AUTOINCREMENT
+	)
+	`
 }
