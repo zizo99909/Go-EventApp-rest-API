@@ -1,9 +1,13 @@
 package routes
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
+	"example.com/rest-api/caching"
 	"example.com/rest-api/models"
 	"github.com/gin-gonic/gin"
 )
@@ -26,12 +30,30 @@ func getEvent(context *gin.Context) {
 		return
 	}
 
+	eventIDStr := strconv.FormatInt(eventId, 10) // convert int64 back to string
+
+	cachedEvent, err := caching.RedisClient.Get(context, eventIDStr).Result()
+
+	if err == nil {
+		// Cache hit: return the cached event
+		var event map[string]interface{}
+		json.Unmarshal([]byte(cachedEvent), &event)
+		context.JSON(http.StatusOK, event)
+		return
+	} else {
+		fmt.Printf("Redis GET error: %v\n", err)
+	}
+
 	event, err := models.GetEventByID(eventId)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not fetch event."})
 		return
 	}
+
+	// Cache the event for future requests
+	eventJSON, _ := json.Marshal(event)
+	caching.RedisClient.Set(context, eventIDStr, eventJSON, 10*time.Minute)
 
 	context.JSON(http.StatusOK, event)
 }
